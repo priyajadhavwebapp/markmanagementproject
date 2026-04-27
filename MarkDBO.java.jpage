@@ -1,0 +1,29 @@
+public List<StudentMark> getMarksAbove(int value) throws Exception {
+
+    List<StudentMark> list = new ArrayList<>();
+
+    Connection con = getConnection();
+
+    PreparedStatement ps = con.prepareStatement(
+        "SELECT * FROM StudentMarks WHERE Marks > ?"
+    );
+
+    ps.setInt(1, value);
+
+    ResultSet rs = ps.executeQuery();
+
+    while (rs.next()) {
+        StudentMark m = new StudentMark();
+        m.setStudentID(rs.getInt("StudentID"));
+        m.setStudentName(rs.getString("StudentName"));
+        m.setSubject(rs.getString("Subject"));
+        m.setMarks(rs.getInt("Marks"));
+        m.setExamDate(rs.getDate("ExamDate"));
+
+        list.add(m);
+    }
+
+    con.close();
+
+    return list;
+}
